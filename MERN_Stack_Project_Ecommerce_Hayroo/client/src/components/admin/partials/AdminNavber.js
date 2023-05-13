@@ -40,7 +40,14 @@ const AdminNavber = (props) => {
             style={{ letterSpacing: "0.70rem" }}
             className="flex items-left text-center font-bold uppercase text-gray-800 text-2xl cursor-pointer px-2 text-center"
           >
-            Balqees
+            <div className="w-full flex justify-center items-center">
+              <img
+                src="https://fontmeme.com/permalink/230512/cbe3d7ee2a9b2df287db14112438018d.png"
+                alt="arabic"
+                border="0"
+                className="h-10"
+              />
+              </div>
           </span>
         </div>
         {/* Small Screen Show */}
@@ -65,7 +72,14 @@ const AdminNavber = (props) => {
             style={{ letterSpacing: "0.10rem" }}
             className="flex items-left text-center font-bold uppercase text-gray-800 text-2xl cursor-pointer px-2 text-center"
           >
-            Balqees
+            <div className="w-full flex justify-center items-center">
+              <img
+                src="https://fontmeme.com/permalink/230512/cbe3d7ee2a9b2df287db14112438018d.png"
+                alt="arabic"
+                border="0"
+                className="h-10"
+              />
+              </div>
           </span>
         </div>
         {/* Both Screen show */}

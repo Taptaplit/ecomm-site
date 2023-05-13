@@ -17,7 +17,7 @@ const Slider = (props) => {
 
   return (
     <Fragment>
-      <div className="relative mt-16 bg-gray-100 border-2">
+      <div className="relative mt-20 bg-accent border-2 border-accent">
         {data.sliderImages.length > 0 ? (
           <img
             className="w-full h-70 object-cover"

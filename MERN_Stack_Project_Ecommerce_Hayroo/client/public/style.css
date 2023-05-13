@@ -13,6 +13,12 @@ html {
   -webkit-text-size-adjust: 100%; /* 2 */
 }
 
+.border-accent {
+  --border-opacity: 1;
+  border-color: #FFCDD2;
+  border-color: #FFCDD2;
+}
+
 /* Sections
    ========================================================================== */
 
@@ -22,6 +28,7 @@ html {
 
 body {
   margin: 0;
+  background: #FFCDD2;
 }
 
 /**
@@ -19238,8 +19245,11 @@ video {
     background-attachment: fixed;
   }
 
-  .bg-accent {
+  .sm\:.bg-accent {
     background-color: #FFCDD2;
+  }
+  .bg-accent {
+    background-color: #FFCDD2 !important;
   }
 
   .sm\:bg-local {
