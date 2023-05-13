@@ -27,6 +27,8 @@ const Navber = (props) => {
       ? dispatch({ type: "cartModalToggle", payload: false })
       : dispatch({ type: "cartModalToggle", payload: true });
 
+  const translatePage = () => {};
+
   return (
     <Fragment>
       {/* Navber Section */}
@@ -71,17 +73,30 @@ const Navber = (props) => {
             <span
               onClick={(e) => history.push("/")}
               style={{ letterSpacing: "0.10rem" }}
-              className="flex items-left text-center font-bold uppercase text-gray-800 text-2xl cursor-pointer px-2 text-center"
+              className="flex items-left ml-2 text-center font-bold uppercase text-gray-800 text-2xl cursor-pointer px-2 text-center"
             >
-              Hayroo
+              <div className="w-full flex justify-center items-center">
+              <img
+                src="https://fontmeme.com/permalink/230512/cbe3d7ee2a9b2df287db14112438018d.png"
+                alt="arabic"
+                border="0"
+                className="h-10"
+              />
+              </div>
             </span>
           </div>
           <div
             onClick={(e) => history.push("/")}
-            style={{ letterSpacing: "0.70rem" }}
-            className="hidden lg:block flex items-left col-span-1 text-center text-gray-800 font-bold tracking-widest uppercase text-2xl cursor-pointer"
+            className="hidden lg:block flex items-center  justify-center col-span-1 text-gray-800 font-bold cursor-pointer"
           >
-            Hayroo
+            <div className="w-full flex justify-center items-center">
+              <img
+                src="https://fontmeme.com/permalink/230512/cbe3d7ee2a9b2df287db14112438018d.png"
+                alt="arabic"
+                border="0"
+                className="h-12"
+              />
+              </div>
           </div>
           <div className="flex items-right col-span-2 lg:col-span-1 flex justify-end">
             {/*  WishList Page Button */}
@@ -356,6 +371,14 @@ const Navber = (props) => {
               <span className="absolute top-0 ml-6 mt-1 bg-yellow-700 rounded px-1 text-white text-xs hover:text-gray-200 font-semibold">
                 {data.cartProduct !== null ? data.cartProduct.length : 0}
               </span>
+            </div>
+            {/* Translation Button */}
+            <div
+              onClick={(e) => translatePage()}
+              className="hover:bg-gray-200 px-2 py-2 rounded-lg relative cursor-pointer scale-50"
+              title="Translate"
+            >
+              <img src="/translate.svg" className="scale-50" />
             </div>
           </div>
         </div>
