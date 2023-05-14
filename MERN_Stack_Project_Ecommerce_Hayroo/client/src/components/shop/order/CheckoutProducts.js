@@ -8,6 +8,7 @@ import { getBrainTreeToken, getPaymentProcess } from "./FetchApi";
 import { fetchData, fetchbrainTree, pay } from "./Action";
 
 import DropIn from "braintree-web-drop-in-react";
+import { checkLanguage } from "../partials/Navber";
 
 const apiURL = process.env.REACT_APP_API_URL;
 
@@ -23,8 +24,11 @@ export const CheckoutComponent = (props) => {
     clientToken: null,
     instance: {},
   });
+  const [language, setLanguage] = useState();
 
   useEffect(() => {
+    const languages = checkLanguage();
+    setLanguage(languages);
     fetchData(cartListProduct, dispatch);
     fetchbrainTree(getBrainTreeToken, setState);
 
@@ -48,14 +52,19 @@ export const CheckoutComponent = (props) => {
             d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
           ></path>
         </svg>
-        Please wait untill finish
+        {language === "english"
+          ? "Please wait until finish"
+          : "يرجى الانتظار حتى الانتهاء"}
       </div>
     );
   }
   return (
     <Fragment>
       <section className="mx-4 mt-20 md:mx-12 md:mt-32 lg:mt-24">
-        <div className="text-2xl mx-2">Order</div>
+        <div className="text-2xl mx-2">
+          {" "}
+          {language === "english" ? "Order" : "طلب"}
+        </div>
         {/* Product List */}
         <div className="flex flex-col md:flex md:space-x-2 md:flex-row">
           <div className="md:w-1/2">
@@ -77,7 +86,9 @@ export const CheckoutComponent = (props) => {
                   )}
                   <div className="flex flex-col py-2">
                     <label htmlFor="address" className="pb-2">
-                      Dalivery Address
+                      {language === "english"
+                        ? "Delivery Address"
+                        : "عنوان التسليم"}
                     </label>
                     <input
                       value={state.address}
@@ -91,12 +102,14 @@ export const CheckoutComponent = (props) => {
                       type="text"
                       id="address"
                       className="border px-4 py-2"
-                      placeholder="Address..."
+                      placeholder={
+                        language === "english" ? "Address..." : "عنوان..."
+                      }
                     />
                   </div>
                   <div className="flex flex-col py-2 mb-2">
                     <label htmlFor="phone" className="pb-2">
-                      Phone
+                      {language === "english" ? "Phone" : "هاتف"}
                     </label>
                     <input
                       value={state.phone}
@@ -137,7 +150,7 @@ export const CheckoutComponent = (props) => {
                     className="w-full px-4 py-2 text-center text-white font-semibold cursor-pointer"
                     style={{ background: "#303031" }}
                   >
-                    Pay now
+                    {language === "english" ? "Pay now" : "ادفع الآن"}
                   </div>
                 </div>
               </Fragment>
@@ -168,6 +181,12 @@ export const CheckoutComponent = (props) => {
 
 const CheckoutProducts = ({ products }) => {
   const history = useHistory();
+  const [language, setLanguage] = useState();
+
+  useEffect(() => {
+    const languages = checkLanguage();
+    setLanguage(languages);
+  }, []);
 
   return (
     <Fragment>
@@ -187,23 +206,23 @@ const CheckoutProducts = ({ products }) => {
                     alt="wishListproduct"
                   />
                   <div className="text-lg md:ml-6 truncate">
-                    {product.pName}
+                    {language === "english" ? product.pName : product.aName}
                   </div>
                   <div className="md:ml-6 font-semibold text-gray-600 text-sm">
-                    Price : ${product.pPrice}.00{" "}
+                    Price : {language === "english" ? "$" : "دنار"}{product.pPrice}.00{" "}
                   </div>
                   <div className="md:ml-6 font-semibold text-gray-600 text-sm">
                     Quantitiy : {quantity(product._id)}
                   </div>
                   <div className="font-semibold text-gray-600 text-sm">
-                    Subtotal : ${subTotal(product._id, product.pPrice)}.00
+                    Subtotal : {language === "english" ? "$" : "دنار"}{subTotal(product._id, product.pPrice)}.00
                   </div>
                 </div>
               </div>
             );
           })
         ) : (
-          <div>No product found for checkout</div>
+          <div>{language === "english" ? "No product found for checkout" : "لم يتم العثور على منتج للمغادرة"}</div>
         )}
       </div>
     </Fragment>

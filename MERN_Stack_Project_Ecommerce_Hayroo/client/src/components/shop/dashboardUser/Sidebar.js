@@ -1,13 +1,19 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useState, useEffect } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import { logout } from "./Action";
 import { DashboardUserContext } from "./Layout";
+import { checkLanguage } from "../partials/Navber";
 
 const Sidebar = (props) => {
   const { data } = useContext(DashboardUserContext);
 
   const history = useHistory();
   const location = useLocation();
+  const [language, setLanugage] = useState();
+  useEffect(() => {
+    const languages = checkLanguage();
+    setLanugage(languages);
+  }, []);
 
   return (
     <Fragment>
@@ -31,7 +37,9 @@ const Sidebar = (props) => {
             />
           </svg>
           <div className="flex flex-col w-full">
-            <span className="text-sm">Hello,</span>
+            <span className="text-sm">
+              {language === "english" ? "Hello," : "مرحبًا،"}
+            </span>
             <span className="text-lg">
               {data.userDetails ? data.userDetails.name : ""}
             </span>
@@ -46,7 +54,7 @@ const Sidebar = (props) => {
                 : ""
             }  px-4 py-4 hover:bg-gray-200 cursor-pointer`}
           >
-            My Orders
+            {language === "english" ? "My Orders" : "طلباتي"}
           </div>
           <hr />
           <div
@@ -57,14 +65,14 @@ const Sidebar = (props) => {
                 : ""
             }  px-4 py-4 hover:bg-gray-200 cursor-pointer`}
           >
-            My Accounts
+            {language === "english" ? "My Accounts" : "حساباتي"}
           </div>
           <hr />
           <div
             onClick={(e) => history.push("/wish-list")}
             className={` px-4 py-4 hover:bg-gray-200 cursor-pointer`}
           >
-            My Wishlist
+            {language === "english" ? "My Wishlist" : "قائمة امنياتي"}
           </div>
           <hr />
           <div
@@ -76,6 +84,7 @@ const Sidebar = (props) => {
             }  px-4 py-4 hover:bg-gray-200 cursor-pointer`}
           >
             Setting
+            {language === "english" ? "Setting" : "جلسة"}
           </div>
           <hr />
           <div
@@ -86,7 +95,7 @@ const Sidebar = (props) => {
                 : ""
             }  px-4 py-4 hover:bg-gray-200 cursor-pointer`}
           >
-            Logout
+            {language === "english" ? "Logout" : "تسجيل خروج"}
           </div>
         </div>
       </div>

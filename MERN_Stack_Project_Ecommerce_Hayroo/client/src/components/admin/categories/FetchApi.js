@@ -24,14 +24,18 @@ export const getAllCategory = async () => {
 
 export const createCategory = async ({
   cName,
+  aName,
   cImage,
   cDescription,
+  aDescription,
   cStatus,
 }) => {
   let formData = new FormData();
   formData.append("cImage", cImage);
   formData.append("cName", cName);
+  formData.append("aName", aName);
   formData.append("cDescription", cDescription);
+  formData.append("aDescription", aDescription);
   formData.append("cStatus", cStatus);
 
   try {

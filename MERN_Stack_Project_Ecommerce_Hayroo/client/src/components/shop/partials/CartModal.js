@@ -1,10 +1,11 @@
-import React, { Fragment, useContext, useEffect } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { LayoutContext } from "../index";
 import { cartListProduct } from "./FetchApi";
 import { isAuthenticate } from "../auth/fetchApi";
 import { cartList } from "../productDetails/Mixins";
 import { subTotal, quantity, totalCost } from "./Mixins";
+import { checkLanguage } from "./Navber";
 
 const apiURL = process.env.REACT_APP_API_URL;
 
@@ -13,11 +14,14 @@ const CartModal = () => {
 
   const { data, dispatch } = useContext(LayoutContext);
   const products = data.cartProduct;
+  const [language, setLanguage] = useState();
 
   const cartModalOpen = () =>
     dispatch({ type: "cartModalToggle", payload: !data.cartModal });
 
   useEffect(() => {
+    const languages = checkLanguage();
+    setLanguage(languages);
     fetchData();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -73,7 +77,7 @@ const CartModal = () => {
         >
           <div className="overflow-y-auto">
             <div className="border-b border-gray-700 flex justify-between">
-              <div className="p-4 text-white text-lg font-semibold">Cart</div>
+              <div className="p-4 text-white text-lg font-semibold">{language === "english" ? "Cart" : "عربة التسوق"}</div>
               {/* Cart Modal Close Button */}
               <div className="p-4 text-white">
                 <svg
@@ -105,7 +109,7 @@ const CartModal = () => {
                           alt="cartProduct"
                         />
                         <div className="relative w-full flex flex-col">
-                          <div className="my-2">{item.pName}</div>
+                          <div className="my-2">{language === "english" ? item.pName : item.aName}</div>
                           <div className="flex items-center justify-between">
                             <div className="flex items-center justify-between space-x-2">
                               <div className="text-sm text-gray-400">
@@ -122,7 +126,7 @@ const CartModal = () => {
                               <span className="text-sm text-gray-400">
                                 Subtotoal :
                               </span>{" "}
-                              ${subTotal(item._id, item.pPrice)}.00
+                              {language === "english" ? "$" : "دنار"}{subTotal(item._id, item.pPrice)}.00
                             </div>{" "}
                             {/* SUbtotal Count */}
                           </div>
@@ -153,7 +157,7 @@ const CartModal = () => {
 
               {products === null && (
                 <div className="m-4 flex-col text-white text-xl text-center">
-                  No product in cart
+                  {language === "english" ? "No product in cart" : "لا يوجد منتج في سلة التسوق"}
                 </div>
               )}
             </div>
@@ -163,7 +167,7 @@ const CartModal = () => {
               onClick={(e) => cartModalOpen()}
               className="cursor-pointer px-4 py-2 border border-gray-400 text-white text-center cursor-pointer"
             >
-              Continue shopping
+              {language === "english" ? "Continue shopping" : "مواصلة التسوق"}
             </div>
             {data.cartTotalCost ? (
               <Fragment>
@@ -175,7 +179,7 @@ const CartModal = () => {
                       cartModalOpen();
                     }}
                   >
-                    Checkout ${data.cartTotalCost}.00
+                    Checkout {language === "english" ? "$" : "دنار"}{data.cartTotalCost}.00
                   </div>
                 ) : (
                   <div
@@ -199,7 +203,7 @@ const CartModal = () => {
               </Fragment>
             ) : (
               <div className="px-4 py-2 bg-black text-white text-center cursor-not-allowed">
-                Checkout
+                {language === "english" ? "Checkout" : "الدفع"}
               </div>
             )}
           </div>

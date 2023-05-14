@@ -7,7 +7,15 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    aName: {
+      type: String,
+      required: true,
+    },
     pDescription: {
+      type: String,
+      required: true,
+    },
+    aDescription: {
       type: String,
       required: true,
     },

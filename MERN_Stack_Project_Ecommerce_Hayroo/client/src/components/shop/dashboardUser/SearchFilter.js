@@ -1,6 +1,12 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
+import { checkLanguage } from "../partials/Navber";
 
 const SearchFilter = (props) => {
+  const [language, setLanugage] = useState();
+  useEffect(() => {
+    const languages = checkLanguage();
+    setLanugage(languages)
+  }, []) 
   return (
     <Fragment>
       <div className="w-full my-4 md:my-0 flex items-start justify-end">
@@ -20,7 +26,7 @@ const SearchFilter = (props) => {
             </svg>
           </span>
           <input
-            placeholder="Find orders..."
+            placeholder={language === "english" ? "Find orders..." : "البحث عن الطلبات ..."}
             className="w-full py-2 px-2 focus:outline-none"
             type="text"
           />

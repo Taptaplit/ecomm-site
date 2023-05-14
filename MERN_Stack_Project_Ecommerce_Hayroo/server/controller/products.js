@@ -42,7 +42,7 @@ class Product {
   }
 
   async postAddProduct(req, res) {
-    let { pName, pDescription, pPrice, pQuantity, pCategory, pOffer, pStatus } =
+    let { pName, aName, pDescription, aDescription, pPrice, pQuantity, pCategory, pOffer, pStatus } =
       req.body;
     let images = req.files;
     // Validation
@@ -78,7 +78,9 @@ class Product {
         let newProduct = new productModel({
           pImages: allImages,
           pName,
+          aName,
           pDescription,
+          aDescription,
           pPrice,
           pQuantity,
           pCategory,

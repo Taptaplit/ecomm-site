@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { getAllProduct } from "../../admin/products/FetchApi";
 import { HomeContext } from "./index";
 import { isWishReq, unWishReq, isWish } from "./Mixins";
+import { checkLanguage } from "../partials/Navber";
 
 const apiURL = process.env.REACT_APP_API_URL;
 
@@ -10,6 +11,7 @@ const SingleProduct = (props) => {
   const { data, dispatch } = useContext(HomeContext);
   const { products } = data;
   const history = useHistory();
+  const [language, setLanguage] = useState();
 
   /* WhisList State */
   const [wList, setWlist] = useState(
@@ -17,6 +19,8 @@ const SingleProduct = (props) => {
   );
 
   useEffect(() => {
+    const languages = checkLanguage();
+    setLanguage(languages);
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -71,7 +75,7 @@ const SingleProduct = (props) => {
                 />
                 <div className="flex items-center justify-between mt-2">
                   <div className="text-gray-600 font-light truncate">
-                    {item.pName}
+                    {language === "english" ? item.pName : item.aName}
                   </div>
                   <div className="flex items-center space-x-1">
                     <span>
@@ -95,7 +99,7 @@ const SingleProduct = (props) => {
                     </span>
                   </div>
                 </div>
-                <div>${item.pPrice}.00</div>
+                <div>{language === "english" ? "$" : "دنار"}{item.pPrice}.00</div>
                 {/* WhisList Logic  */}
                 <div className="absolute top-0 right-0 mx-2 my-2 md:mx-4">
                   <svg
@@ -138,7 +142,9 @@ const SingleProduct = (props) => {
         })
       ) : (
         <div className="col-span-2 md:col-span-3 lg:col-span-4 flex items-center justify-center py-24 text-2xl">
-          No product found
+          {language === "english"
+              ? "No product found"
+              : "لم يتم العثور على منتج"}
         </div>
       )}
     </Fragment>

@@ -2,6 +2,7 @@ import React, { Fragment, useContext, useState, useEffect } from "react";
 import Layout from "./Layout";
 import { DashboardUserContext } from "./Layout";
 import { updatePersonalInformationAction } from "./Action";
+import { checkLanguage } from "../partials/Navber";
 
 const ProfileComponent = () => {
   const { data, dispatch } = useContext(DashboardUserContext);
@@ -14,6 +15,11 @@ const ProfileComponent = () => {
     phone: "",
     success: false,
   });
+  const [language, setLanugage] = useState();
+  useEffect(() => {
+    const languages = checkLanguage();
+    setLanugage(languages);
+  })
 
   useEffect(() => {
     setFdata({
@@ -56,7 +62,7 @@ const ProfileComponent = () => {
       <div className="flex flex-col w-full my-4 md:my-0 md:w-9/12 md:px-8">
         <div className="shadow-lg border">
           <div className="py-4 px-4 text-lg font-semibold border-t-2 border-yellow-700">
-            Personal Information
+            {language === "english" ? "Personal Information" : "معلومات شخصية"}
           </div>
           <hr />
           <div className="py-4 px-4 md:px-8 lg:px-16 flex flex-col space-y-4">
@@ -68,7 +74,7 @@ const ProfileComponent = () => {
               ""
             )}
             <div className="flex flex-col space-y-2">
-              <label htmlFor="name">Name</label>
+              <label htmlFor="name">{language === "english" ? "Name": "اسم"}</label>
               <input
                 onChange={(e) => setFdata({ ...fData, name: e.target.value })}
                 value={fData.name}
@@ -78,7 +84,7 @@ const ProfileComponent = () => {
               />
             </div>
             <div className="flex flex-col space-y-2">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">{language === "english" ? "Email": "بريد إلكتروني"}</label>
               <input
                 value={fData.email}
                 readOnly
@@ -87,11 +93,11 @@ const ProfileComponent = () => {
                 className="cursor-not-allowed border px-4 py-2 bg-gray-200 w-full focus:outline-none focus:cursor-not-allowed"
               />
               <span className="text-xs text-gray-500">
-                You can't change your email
+              {language === "english" ? "You can't change your email.": "لا يمكنك تغيير بريدك الإلكتروني."}
               </span>
             </div>
             <div className="flex flex-col space-y-2">
-              <label htmlFor="number">Phone Number</label>
+              <label htmlFor="number">{language === "english" ? "Phone Number": "رقم التليفون"}</label>
               <input
                 onChange={(e) => setFdata({ ...fData, phone: e.target.value })}
                 value={fData.phone}
@@ -105,7 +111,7 @@ const ProfileComponent = () => {
               style={{ background: "#303031" }}
               className="w-full text-center cursor-pointer px-4 py-2 text-gray-100"
             >
-              Update Information
+              {language === "english" ? "Update Information": "تحديث المعلومات"}
             </div>
           </div>
         </div>

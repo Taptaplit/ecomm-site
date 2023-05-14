@@ -2,11 +2,17 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import Layout from "../layout";
 import { productByCategory } from "../../admin/products/FetchApi";
+import { checkLanguage } from "../partials/Navber";
 
 const apiURL = process.env.REACT_APP_API_URL;
 
 const Submenu = ({ category }) => {
   const history = useHistory();
+  const [language, setLanguage] = useState();
+  useEffect(() => {
+    const languages = checkLanguage();
+    setLanguage(languages);
+  }, []);
   return (
     <Fragment>
       {/* Submenu Section */}
@@ -17,7 +23,7 @@ const Submenu = ({ category }) => {
               className="hover:text-yellow-700 cursor-pointer"
               onClick={(e) => history.push("/")}
             >
-              Shop
+              {language === "english" ? "Shop" : "محل"}
             </span>
             <span className="text-yellow-700 cursor-default">{category}</span>
           </div>
@@ -44,13 +50,16 @@ const Submenu = ({ category }) => {
   );
 };
 
-const AllProduct = ({ products }) => {
+const AllProduct = ({ products, language }) => {
   const history = useHistory();
   const category =
     products && products.length > 0 ? products[0].pCategory.cName : "";
+  const acategory =
+    products && products.length > 0 ? products[0].pCategory.aName : "";
+  
   return (
     <Fragment>
-      <Submenu category={category} />
+      <Submenu category={language === "english" ? category : acategory} />
       <section className="m-4 md:mx-8 md:my-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {products && products.length > 0 ? (
           products.map((item, index) => {
@@ -65,7 +74,7 @@ const AllProduct = ({ products }) => {
                   />
                   <div className="flex items-center justify-between mt-2">
                     <div className="text-gray-600 font-light truncate">
-                      {item.pName}
+                      {language === "english" ? item.pName : item.aName}
                     </div>
                     <div className="flex items-center space-x-1">
                       <span>
@@ -89,7 +98,9 @@ const AllProduct = ({ products }) => {
                       </span>
                     </div>
                   </div>
-                  <div>{item.pPrice}.00$</div>
+                  <div>
+                    {item.pPrice}.00{language === "english" ? "$" : "دنار"}
+                  </div>
                   <div className="absolute top-0 right-0 mx-2 my-2 md:mx-4">
                     <svg
                       className="w-5 h-5 md:w-6 md:h-6 cursor-pointer text-yellow-700"
@@ -112,7 +123,9 @@ const AllProduct = ({ products }) => {
           })
         ) : (
           <div className="col-span-2 md:col-span-3 lg:col-span-4 flex items-center justify-center py-24 text-2xl">
-            No product found
+            {language === "english"
+              ? "No product found"
+              : "لم يتم العثور على منتج"}
           </div>
         )}
       </section>
@@ -123,8 +136,11 @@ const AllProduct = ({ products }) => {
 const PageComponent = () => {
   const [products, setProducts] = useState(null);
   const { catId } = useParams();
+  const [language, setLanguage] = useState();
 
   useEffect(() => {
+    const languages = checkLanguage();
+    setLanguage(languages);
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -142,7 +158,7 @@ const PageComponent = () => {
 
   return (
     <Fragment>
-      <AllProduct products={products} />
+      <AllProduct products={products} language={language} />
     </Fragment>
   );
 };

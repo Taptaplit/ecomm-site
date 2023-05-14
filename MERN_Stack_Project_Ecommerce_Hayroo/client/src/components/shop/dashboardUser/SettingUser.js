@@ -1,7 +1,8 @@
-import React, { Fragment, useState, useContext } from "react";
+import React, { Fragment, useState, useContext, useEffect } from "react";
 import Layout from "./Layout";
 import { handleChangePassword } from "./Action";
 import { DashboardUserContext } from "./Layout";
+import { checkLanguage } from "../partials/Navber";
 
 const SettingComponent = () => {
   const { data, dispatch } = useContext(DashboardUserContext);
@@ -15,6 +16,11 @@ const SettingComponent = () => {
     passwordView: false,
     type: "password",
   });
+  const [language, setLanugage] = useState();
+  useEffect(() => {
+    const languages = checkLanguage();
+    setLanugage(languages)
+  }, []) 
 
   if (fData.success || fData.error) {
     setTimeout(() => {
@@ -47,7 +53,7 @@ const SettingComponent = () => {
       <div className="flex flex-col w-full my-4 md:my-0 md:w-9/12 md:px-8">
         <div className="shadow-lg border">
           <div className="py-4 px-4 text-lg font-semibold border-t-2 border-yellow-700">
-            Change Password
+            {language === "english" ? "Change Password" : "تغيير كلمة المرور"}
           </div>
           <hr />
           <div className="py-4 px-4 md:px-8 lg:px-16 flex flex-col space-y-4">
@@ -64,7 +70,7 @@ const SettingComponent = () => {
               ""
             )}
             <div className="flex flex-col space-y-2">
-              <label htmlFor="oldPassword">Old Password</label>
+              <label htmlFor="oldPassword">{language === "english" ? "Old Password" : "كلمة المرور القديمة"}</label>
               <div className="relative">
                 <input
                   onChange={(e) =>
@@ -134,7 +140,7 @@ const SettingComponent = () => {
               </div>
             </div>
             <div className="flex flex-col space-y-2">
-              <label htmlFor="newPassword">New Password</label>
+              <label htmlFor="newPassword">{language === "english" ? "New Password" : "كلمة المرور الجديدة"}</label>
               <input
                 onChange={(e) =>
                   setFdata({ ...fData, newPassword: e.target.value })
@@ -146,7 +152,7 @@ const SettingComponent = () => {
               />
             </div>
             <div className="flex flex-col space-y-2">
-              <label htmlFor="confirmPassword">Confirm Password</label>
+              <label htmlFor="confirmPassword">{language === "english" ? "Confirm Password" : "تأكيد كلمة المرور"}</label>
               <input
                 onChange={(e) =>
                   setFdata({ ...fData, confirmPassword: e.target.value })
@@ -162,7 +168,7 @@ const SettingComponent = () => {
               style={{ background: "#303031" }}
               className="w-full text-center cursor-pointer px-4 py-2 text-gray-100"
             >
-              Change password
+              {language === "english" ? "Change password" : "تغيير كلمة المرور"}
             </div>
           </div>
         </div>

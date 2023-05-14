@@ -1,8 +1,14 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import { LayoutContext } from "../layout";
+import { checkLanguage } from "../partials/Navber";
 
 const OrderSuccessMessage = (props) => {
   const { data, dispatch } = useContext(LayoutContext);
+  const [language, setLanguage] = useState()
+  useEffect(() => {
+    const languages = checkLanguage();
+    setLanguage(languages);
+  }, [])
   return (
     <Fragment>
       <div
@@ -11,7 +17,7 @@ const OrderSuccessMessage = (props) => {
         } fixed bottom-0 flex justify-between items-center z-30 w-full bg-gray-800 text-white text-lg py-8 md:py-16 md:text-xl px-4 text-center`}
       >
         <span className="w-10/12 md:w-full">
-          Your Order in process. Wait 2 days to deliver.
+          {language === "english" ? "Your Order in process. Wait 2 days to deliver." : ".طلبك قيد المعالجة. انتظر يومين للتسليم"}
         </span>
         <span
           onClick={(e) => dispatch({ type: "orderSuccess", payload: false })}

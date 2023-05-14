@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import "./style.css";
 
@@ -6,11 +6,21 @@ import { logout } from "./Action";
 import { LayoutContext } from "../index";
 import { isAdmin } from "../auth/fetchApi";
 
+export const checkLanguage = () => {
+  const language = localStorage.getItem("balquees_language");
+  return language;
+};
+
 const Navber = (props) => {
   const history = useHistory();
   const location = useLocation();
 
   const { data, dispatch } = useContext(LayoutContext);
+  const [language, setLanguage] = useState();
+  useEffect(() => {
+    const current_lang = checkLanguage();
+    setLanguage(current_lang);
+  }, []);
 
   const navberToggleOpen = () =>
     data.navberHamburger
@@ -27,7 +37,17 @@ const Navber = (props) => {
       ? dispatch({ type: "cartModalToggle", payload: false })
       : dispatch({ type: "cartModalToggle", payload: true });
 
-  const translatePage = () => {};
+  const translatePage = () => {
+    const current_lang = checkLanguage();
+    if (current_lang === null) {
+      localStorage.setItem("balquees_language", "arabic");
+    } else if (current_lang === "arabic") {
+      localStorage.setItem("balquees_language", "english");
+    } else if (current_lang === "english") {
+      localStorage.setItem("balquees_language", "arabic");
+    }
+    window.location.reload();
+  };
 
   return (
     <Fragment>
@@ -39,19 +59,19 @@ const Navber = (props) => {
               className="hover:bg-gray-200 px-4 py-3 rounded-lg font-light tracking-widest hover:text-gray-800 cursor-pointer"
               onClick={(e) => history.push("/")}
             >
-              Shop
+              {language === "english" ? "Shop" : "محل"}
             </span>
             <span
               className="hover:bg-gray-200 px-4 py-3 rounded-lg font-light tracking-widest hover:text-gray-800 cursor-pointer"
               onClick={(e) => history.push("/blog")}
             >
-              Blog
+              {language === "english" ? "Blog" : "مدونة"}
             </span>
             <span
               className="hover:bg-gray-200 px-4 py-3 rounded-lg font-light tracking-widest hover:text-gray-800 cursor-pointer"
               onClick={(e) => history.push("/contact-us")}
             >
-              Contact us
+              {language === "english" ? "Contact Us" : "اتصل بنا"}
             </span>
           </div>
           <div className="col-span-2 lg:hidden flex justify-items-stretch	 items-center">
@@ -76,12 +96,12 @@ const Navber = (props) => {
               className="flex items-left ml-2 text-center font-bold uppercase text-gray-800 text-2xl cursor-pointer px-2 text-center"
             >
               <div className="w-full flex justify-center items-center">
-              <img
-                src="https://fontmeme.com/permalink/230512/cbe3d7ee2a9b2df287db14112438018d.png"
-                alt="arabic"
-                border="0"
-                className="h-10"
-              />
+                <img
+                  src="https://fontmeme.com/permalink/230512/cbe3d7ee2a9b2df287db14112438018d.png"
+                  alt="arabic"
+                  border="0"
+                  className="h-10"
+                />
               </div>
             </span>
           </div>
@@ -96,7 +116,7 @@ const Navber = (props) => {
                 border="0"
                 className="h-12"
               />
-              </div>
+            </div>
           </div>
           <div className="flex items-right col-span-2 lg:col-span-1 flex justify-end">
             {/*  WishList Page Button */}

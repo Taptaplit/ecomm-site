@@ -12,7 +12,9 @@ const AddProductDetail = ({ categories }) => {
 
   const [fData, setFdata] = useState({
     pName: "",
+    aName: "",
     pDescription: "",
+    aDescription: "",
     pStatus: "Active",
     pImage: null, // Initial value will be null or empty array
     pCategory: "",
@@ -53,7 +55,9 @@ const AddProductDetail = ({ categories }) => {
         setFdata({
           ...fData,
           pName: "",
+          aName: "",
           pDescription: "",
+          aDescription: "",
           pImage: "",
           pStatus: "Active",
           pCategory: "",
@@ -67,7 +71,9 @@ const AddProductDetail = ({ categories }) => {
           setFdata({
             ...fData,
             pName: "",
+            aName: "",
             pDescription: "",
+            aDescription: "",
             pImage: "",
             pStatus: "Active",
             pCategory: "",
@@ -173,6 +179,23 @@ const AddProductDetail = ({ categories }) => {
                 />
               </div>
             </div>
+            <div className="w-full flex flex-col space-y-1 space-x-1">
+                <label htmlFor="name">Product Name (Arabic)</label>
+                <input
+                  value={fData.aName}
+                  onChange={(e) =>
+                    setFdata({
+                      ...fData,
+                      error: false,
+                      success: false,
+                      aName: e.target.value,
+                    })
+                  }
+                  type="text"
+                  className="px-4 py-2 border focus:outline-none"
+                  id="name"
+                />
+              </div>
             <div className="flex flex-col space-y-2">
               <label htmlFor="description">Product Description *</label>
               <textarea
@@ -183,6 +206,25 @@ const AddProductDetail = ({ categories }) => {
                     error: false,
                     success: false,
                     pDescription: e.target.value,
+                  })
+                }
+                className="px-4 py-2 border focus:outline-none"
+                name="description"
+                id="description"
+                cols={5}
+                rows={2}
+              />
+            </div>
+            <div className="flex flex-col space-y-2">
+              <label htmlFor="description">Product Description (Arabic)</label>
+              <textarea
+                value={fData.aDescription}
+                onChange={(e) =>
+                  setFdata({
+                    ...fData,
+                    error: false,
+                    success: false,
+                    aDescription: e.target.value,
                   })
                 }
                 className="px-4 py-2 border focus:outline-none"

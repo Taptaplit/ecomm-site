@@ -21,7 +21,9 @@ export const createPorductImage = async ({ pImage }) => {
 
 export const createProduct = async ({
   pName,
+  aName,
   pDescription,
+  aDescription,
   pImage,
   pStatus,
   pCategory,
@@ -36,7 +38,9 @@ export const createProduct = async ({
   }
   /* Most important part for uploading multiple image  */
   formData.append("pName", pName);
+  formData.append("aName", aName);
   formData.append("pDescription", pDescription);
+  formData.append("aDescription", aDescription);
   formData.append("pStatus", pStatus);
   formData.append("pCategory", pCategory);
   formData.append("pQuantity", pQuantity);

@@ -11,7 +11,9 @@ const AddCategoryModal = (props) => {
 
   const [fData, setFdata] = useState({
     cName: "",
+    aName: "",
     cDescription: "",
+    aDescription: "",
     cImage: "",
     cStatus: "Active",
     success: false,
@@ -52,7 +54,9 @@ const AddCategoryModal = (props) => {
         setFdata({
           ...fData,
           cName: "",
+          aName: "",
           cDescription: "",
+          aDescription: "",
           cImage: "",
           cStatus: "Active",
           success: responseData.success,
@@ -63,8 +67,9 @@ const AddCategoryModal = (props) => {
           setFdata({
             ...fData,
             cName: "",
+            aName: "",
             cDescription: "",
-            cImage: "",
+            aDescription: "",
             cStatus: "Active",
             success: false,
             error: false,
@@ -147,6 +152,22 @@ const AddCategoryModal = (props) => {
                 type="text"
               />
             </div>
+            <div className="flex flex-col space-y-1 w-full py-4">
+              <label htmlFor="name">Category Name (Arabic)</label>
+              <input
+                onChange={(e) =>
+                  setFdata({
+                    ...fData,
+                    success: false,
+                    error: false,
+                    aName: e.target.value,
+                  })
+                }
+                value={fData.aName}
+                className="px-4 py-2 border focus:outline-none"
+                type="text"
+              />
+            </div>
             <div className="flex flex-col space-y-1 w-full">
               <label htmlFor="description">Category Description</label>
               <textarea
@@ -159,6 +180,25 @@ const AddCategoryModal = (props) => {
                   })
                 }
                 value={fData.cDescription}
+                className="px-4 py-2 border focus:outline-none"
+                name="description"
+                id="description"
+                cols={5}
+                rows={5}
+              />
+            </div>
+            <div className="flex flex-col space-y-1 w-full my-2">
+              <label htmlFor="description">Category Description (Arabic)</label>
+              <textarea
+                onChange={(e) =>
+                  setFdata({
+                    ...fData,
+                    success: false,
+                    error: false,
+                    aDescription: e.target.value,
+                  })
+                }
+                value={fData.aDescription}
                 className="px-4 py-2 border focus:outline-none"
                 name="description"
                 id="description"

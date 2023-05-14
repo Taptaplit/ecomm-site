@@ -1,23 +1,45 @@
-import React, { Fragment, useEffect, useContext } from "react";
+import React, { Fragment, useEffect, useContext, useState } from "react";
 import moment from "moment";
 import { fetchOrderByUser } from "./Action";
 import Layout, { DashboardUserContext } from "./Layout";
+import { checkLanguage } from "../partials/Navber";
 
 const apiURL = process.env.REACT_APP_API_URL;
 
 const TableHeader = () => {
+  const [language, setLanugage] = useState();
+  useEffect(() => {
+    const languages = checkLanguage();
+    setLanugage(languages);
+  }, []);
   return (
     <Fragment>
       <thead>
         <tr>
-          <th className="px-4 py-2 border">Products</th>
-          <th className="px-4 py-2 border">Status</th>
-          <th className="px-4 py-2 border">Total</th>
-          <th className="px-4 py-2 border">Phone</th>
-          <th className="px-4 py-2 border">Address</th>
-          <th className="px-4 py-2 border">Transaction Id</th>
-          <th className="px-4 py-2 border">Checkout</th>
-          <th className="px-4 py-2 border">Processing</th>
+          <th className="px-4 py-2 border">
+            {language === "english" ? "Products" : "منتجات"}
+          </th>
+          <th className="px-4 py-2 border">
+            {language === "english" ? "Status" : "حالة"}
+          </th>
+          <th className="px-4 py-2 border">
+            {language === "english" ? "Total" : "المجموع"}
+          </th>
+          <th className="px-4 py-2 border">
+            {language === "english" ? "Phone" : "هاتف"}
+          </th>
+          <th className="px-4 py-2 border">
+            {language === "english" ? "Address" : "عنوان"}
+          </th>
+          <th className="px-4 py-2 border">
+            {language === "english" ? "Transaction ID" : "رقم المعاملة"}
+          </th>
+          <th className="px-4 py-2 border">
+            {language === "english" ? "Checkout" : "الدفع"}
+          </th>
+          <th className="px-4 py-2 border">
+            {language === "english" ? "Proccessing" : "يعالج"}
+          </th>
         </tr>
       </thead>
     </Fragment>
@@ -25,6 +47,11 @@ const TableHeader = () => {
 };
 
 const TableBody = ({ order }) => {
+  const [language, setLanugage] = useState();
+  useEffect(() => {
+    const languages = checkLanguage();
+    setLanugage(languages);
+  }, []);
   return (
     <Fragment>
       <tr className="border-b">
@@ -37,7 +64,9 @@ const TableBody = ({ order }) => {
                   src={`${apiURL}/uploads/products/${product.id.pImages[0]}`}
                   alt="productImage"
                 />
-                <span>{product.id.pName}</span>
+                <span>
+                  {language === "english" ? product.id.pName : product.id.aName}
+                </span>
                 <span>{product.quantitiy}x</span>
               </span>
             );
@@ -71,7 +100,8 @@ const TableBody = ({ order }) => {
           )}
         </td>
         <td className="hover:bg-gray-200 p-2 text-center">
-          ${order.amount}.00
+          {language === "english" ? "$" : "دنار"}
+          {order.amount}.00
         </td>
         <td className="hover:bg-gray-200 p-2 text-center">{order.phone}</td>
         <td className="hover:bg-gray-200 p-2 text-center">{order.address}</td>
@@ -92,8 +122,10 @@ const TableBody = ({ order }) => {
 const OrdersComponent = () => {
   const { data, dispatch } = useContext(DashboardUserContext);
   const { OrderByUser: orders } = data;
-
+  const [language, setLanugage] = useState();
   useEffect(() => {
+    const languages = checkLanguage();
+    setLanugage(languages);
     fetchOrderByUser(dispatch);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -123,7 +155,7 @@ const OrdersComponent = () => {
       <div className="flex flex-col w-full my-4 md:my-0 md:w-9/12 md:px-8">
         <div className="border">
           <div className="py-4 px-4 text-lg font-semibold border-t-2 border-yellow-700">
-            Orders
+            {language === "english" ? "Orders" : "طلبات"}
           </div>
           <hr />
           <div className="overflow-auto bg-white shadow-lg p-4">
@@ -140,14 +172,18 @@ const OrdersComponent = () => {
                       colSpan="8"
                       className="text-xl text-center font-semibold py-8"
                     >
-                      No order found
+                      {language === "english"
+                        ? "No order found"
+                        : "لم يتم العثور على طلب"}
                     </td>
                   </tr>
                 )}
               </tbody>
             </table>
             <div className="text-sm text-gray-600 mt-2">
-              Total {orders && orders.length} order found
+              {language === "english" ? "Total" : "المجموع"}{" "}
+              {orders && orders.length}{" "}
+              {language === "english" ? "order found" : "تم العثور على الطلب"}
             </div>
           </div>
         </div>

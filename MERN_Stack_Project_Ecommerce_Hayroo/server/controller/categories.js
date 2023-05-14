@@ -15,7 +15,7 @@ class Category {
   }
 
   async postAddCategory(req, res) {
-    let { cName, cDescription, cStatus } = req.body;
+    let { cName, aName, cDescription, aDescription, cStatus } = req.body;
     let cImage = req.file.filename;
     const filePath = `../server/public/uploads/categories/${cImage}`;
 
@@ -40,7 +40,9 @@ class Category {
         } else {
           let newCategory = new categoryModel({
             cName,
+            aName,
             cDescription,
+            aDescription,
             cStatus,
             cImage,
           });

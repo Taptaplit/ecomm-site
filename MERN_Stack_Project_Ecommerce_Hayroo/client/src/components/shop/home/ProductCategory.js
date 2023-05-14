@@ -1,9 +1,15 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import ProductCategoryDropdown from "./ProductCategoryDropdown";
 import { HomeContext } from "./index";
+import { checkLanguage } from "../partials/Navber";
 
 const ProductCategory = (props) => {
   const { data, dispatch } = useContext(HomeContext);
+  const [language, setLanguage] = useState();
+  useEffect(() => {
+    const languages = checkLanguage();
+    setLanguage(languages);
+  }, []);
 
   return (
     <Fragment>
@@ -20,7 +26,7 @@ const ProductCategory = (props) => {
           }`}
         >
           <span className="text-md md:text-lg hover:text-yellow-700">
-            Categories
+            {language === "english" ? "Categories" : "فئات"}
           </span>
           <svg
             className="w-4 h-4 text-yellow-700"
@@ -49,7 +55,10 @@ const ProductCategory = (props) => {
               data.filterListDropdown ? "text-yellow-700" : ""
             }`}
           >
-            <span className="text-md md:text-lg">Filter</span>
+            <span className="text-md md:text-lg">
+              {" "}
+              {language === "english" ? "Filter" : "منقي"}
+            </span>
             <span>
               <svg
                 className="w-4 h-4 text-gray-700 text-yellow-700"
@@ -79,7 +88,10 @@ const ProductCategory = (props) => {
               data.searchDropdown ? "text-yellow-700" : ""
             }`}
           >
-            <span className="text-md md:text-lg">Search</span>
+            <span className="text-md md:text-lg">
+              {" "}
+              {language === "english" ? "Search" : "يبحث"}
+            </span>
             <span>
               <svg
                 className="w-4 h-4 text-gray-700 text-yellow-700"

@@ -3,14 +3,17 @@ import OrderSuccessMessage from "./OrderSuccessMessage";
 import { HomeContext } from "./";
 import { sliderImages } from "../../admin/dashboardAdmin/Action";
 import { prevSlide, nextSlide } from "./Mixins";
+import { checkLanguage } from "../partials/Navber";
 
 const apiURL = process.env.REACT_APP_API_URL;
 
 const Slider = (props) => {
   const { data, dispatch } = useContext(HomeContext);
   const [slide, setSlide] = useState(0);
-
+  const [language, setLanguage] = useState();
   useEffect(() => {
+    const languages = checkLanguage();
+    setLanguage(languages);
     sliderImages(dispatch);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -70,7 +73,7 @@ const Slider = (props) => {
                 style={{ background: "#303031" }}
                 className="cursor-pointer box-border text-2xl text-white px-4 py-2 rounded"
               >
-                Shop Now
+                {language === "english" ? "Shop Now" : "تسوق الآن"}
               </a>
             </div>
           </>

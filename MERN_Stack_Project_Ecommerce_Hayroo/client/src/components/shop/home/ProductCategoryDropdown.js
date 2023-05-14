@@ -6,6 +6,7 @@ import { getAllProduct, productByPrice } from "../../admin/products/FetchApi";
 import "./style.css";
 import { ScrollMenu, VisibilityContext } from "react-horizontal-scrolling-menu";
 import "react-horizontal-scrolling-menu/dist/styles.css";
+import { checkLanguage } from "../partials/Navber";
 
 const apiURL = process.env.REACT_APP_API_URL;
 
@@ -64,8 +65,11 @@ const CategoryList = () => {
   const history = useHistory();
   const { data } = useContext(HomeContext);
   const [categories, setCategories] = useState(null);
+  const [language, setLanguage] = useState();
 
   useEffect(() => {
+    const languages = checkLanguage();
+    setLanguage(languages);
     fetchData();
   }, []);
 
@@ -103,13 +107,13 @@ const CategoryList = () => {
                     className="h-31 w-31 object-cover"
                     alt="pic"
                   />
-                  <div className="font-medium">{item.cName}</div>
+                  <div className="font-medium">{language === "english" ? item.cName : item.aName}</div>
                 </div>
               </Fragment>
             );
           })
         ) : (
-          <div className="text-xl text-center my-4">No Category</div>
+          <div className="text-xl text-center my-4">{language === "english" ? "No Category" : "لا تصنيف"}</div>
         )}
       </ScrollMenu>
     </div>

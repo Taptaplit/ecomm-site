@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "./index";
+import { checkLanguage } from "../partials/Navber";
 
 const PageNotFoundComponent = (props) => {
+  const [language, setLanguage] = useState();
+  useEffect(() => {
+    const languages = checkLanguage();
+    setLanguage(languages);
+  }, []);
   return (
     <div className="flex flex-col items-center justify-center my-32">
       <span>
@@ -21,7 +27,7 @@ const PageNotFoundComponent = (props) => {
         </svg>
       </span>
       <span className="text-center text-gray-700 text-4xl font-bold tracking-widest">
-        404 not found
+        {language === "english" ? "404 not found" : "404 غير موجود"}
       </span>
     </div>
   );
