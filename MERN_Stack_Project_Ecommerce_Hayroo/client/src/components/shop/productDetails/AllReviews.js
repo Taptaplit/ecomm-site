@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Alert } from "./Action";
 
@@ -7,6 +7,7 @@ import { LayoutContext } from "../layout";
 import { deleteReview } from "./Action";
 import { isAuthenticate } from "../auth/fetchApi";
 import { getSingleProduct } from "./FetchApi";
+import { checkLanguage } from "../partials/Navber";
 
 const AllReviews = (props) => {
   const { data, dispatch } = useContext(LayoutContext);
@@ -16,6 +17,11 @@ const AllReviews = (props) => {
   const [fData, setFdata] = useState({
     success: false,
   });
+  const [language, setLanguage] = useState();
+  useEffect(() => {
+    const languages = checkLanguage();
+    setLanguage(languages);
+  }, []);
 
   if (fData.success) {
     setTimeout(() => {
@@ -141,7 +147,7 @@ const AllReviews = (props) => {
             );
           })
         ) : (
-          <div>No Review found</div>
+          <div>{language === "english" ? "No Review found" : "لم يتم العثور على مراجعة"}</div>
         )}
       </div>
     </Fragment>

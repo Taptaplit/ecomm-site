@@ -1,9 +1,10 @@
-import React, { Fragment, useState, useContext } from "react";
+import React, { Fragment, useState, useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Alert, reviewSubmitHanlder } from "./Action";
 import { LayoutContext } from "../layout";
 import { isAuthenticate } from "../auth/fetchApi";
 import { getSingleProduct } from "./FetchApi";
+import { checkLanguage } from "../partials/Navber";
 
 const ReviewForm = (props) => {
   const { data, dispatch } = useContext(LayoutContext);
@@ -22,6 +23,12 @@ const ReviewForm = (props) => {
       setFdata({ ...fData, error: false, success: false });
     }, 3000);
   }
+  const [language, setLanguage] = useState();
+
+  useEffect(() => {
+    const languages = checkLanguage();
+    setLanguage(languages);
+  });
 
   const fetchData = async () => {
     try {
@@ -58,10 +65,13 @@ const ReviewForm = (props) => {
       ) : (
         <div className="mb-12 md:mx-16 lg:mx-20 xl:mx-24 flex flex-col">
           <div className="flex flex-col space-y-2">
-            <span className="text-2xl font-medium">Add a review</span>
+            <span className="text-2xl font-medium">
+              {language === "english" ? "Add a review" : "إضافة إلى استعراض"}
+            </span>
             <span className="text-gray-600 text-sm">
-              Your email address will not be published. Required fields are
-              marked *
+              {language === "english"
+                ? "Your email address will not be published. Required fields are marked "
+                : "لن يتم نشر عنوان بريدك الإلكتروني. الحقول المطلوبة هيملحوظ "}
             </span>
           </div>
           {/* Input Rating */}
@@ -132,7 +142,8 @@ const ReviewForm = (props) => {
           <div className="space-y-4">
             <div className="flex flex-col">
               <label htmlFor="textArea">
-                Review <span className="text-sm text-gray-600">*</span>
+                {language === "english" ? "Review" : "مراجعة"}{" "}
+                <span className="text-sm text-gray-600">*</span>
               </label>
               <textarea
                 onChange={(e) => setFdata({ ...fData, review: e.target.value })}
@@ -150,7 +161,7 @@ const ReviewForm = (props) => {
               style={{ background: "#303031" }}
               className="inline-block rounded px-4 py-2 text-white text-center cursor-pointer"
             >
-              Submit
+              {language === "english" ? "Submit" : "يُقدِّم"}
             </div>
           </div>
         </div>

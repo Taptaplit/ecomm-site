@@ -8,10 +8,17 @@ import { LayoutContext } from "../layout";
 import { isAuthenticate } from "../auth/fetchApi";
 
 import "./style.css";
+import { checkLanguage } from "../partials/Navber";
 
 const Menu = () => {
   const { data, dispatch } = useContext(ProductDetailsContext);
   const { data: layoutData } = useContext(LayoutContext);
+  const [language, setLanguage] = useState();
+
+  useEffect(() => {
+    const languages = checkLanguage();
+    setLanguage(languages);
+  });
 
   return (
     <Fragment>
@@ -22,7 +29,7 @@ const Menu = () => {
             data.menu ? "border-b-2 border-yellow-700" : ""
           } px-4 py-3 cursor-pointer`}
         >
-          Description
+          {language === "english" ? "Description" : "وصف"}
         </div>
         <div
           onClick={(e) => dispatch({ type: "menu", payload: false })}
@@ -30,7 +37,7 @@ const Menu = () => {
             !data.menu ? "border-b-2 border-yellow-700" : ""
           } px-4 py-3 relative flex cursor-pointer`}
         >
-          <span>Reviews</span>
+          <span>{language === "english" ? "Reviews" : "المراجعات"}</span>
           <span className="absolute text-xs top-0 right-0 mt-2 bg-yellow-700 text-white rounded px-1">
             {layoutData.singleProductDetail.pRatingsReviews.length}
           </span>
@@ -41,6 +48,12 @@ const Menu = () => {
 };
 
 const RatingReview = () => {
+  const [language, setLanguage] = useState();
+
+  useEffect(() => {
+    const languages = checkLanguage();
+    setLanguage(languages);
+  });
   return (
     <Fragment>
       <AllReviews />
@@ -48,7 +61,9 @@ const RatingReview = () => {
         <ReviewForm />
       ) : (
         <div className="mb-12 md:mx-16 lg:mx-20 xl:mx-24 bg-red-200 px-4 py-2 rounded mb-4">
-          You need to login in for review
+          {language === "english"
+            ? "You need to login in for review"
+            : "تحتاج إلى تسجيل الدخول للمراجعة"}
         </div>
       )}
     </Fragment>
@@ -59,8 +74,11 @@ const ProductDetailsSectionTwo = (props) => {
   const { data } = useContext(ProductDetailsContext);
   const { data: layoutData } = useContext(LayoutContext);
   const [singleProduct, setSingleproduct] = useState({});
+  const [language, setLanguage] = useState();
 
   useEffect(() => {
+    const languages = checkLanguage();
+    setLanguage(languages);
     setSingleproduct(
       layoutData.singleProductDetail ? layoutData.singleProductDetail : ""
     );
@@ -73,17 +91,25 @@ const ProductDetailsSectionTwo = (props) => {
       <section className="m-4 md:mx-12 md:my-8">
         <Menu />
         {data.menu ? (
-          <div className="mt-6">{singleProduct.pDescription}</div>
+          <div className="mt-6">
+            {language === "english"
+              ? singleProduct.pDescription
+              : singleProduct.aDescription}
+          </div>
         ) : (
           <RatingReview />
         )}
       </section>
       <div className="m-4 md:mx-8 md:my-6 flex justify-center capitalize font-light tracking-widest bg-white border-t border-b text-gray-800 px-4 py-4 space-x-4">
         <div>
-          <span>Category :</span>
+          <span>{language === "english" ? "Category" : "فئة"}:</span>
           <span className="text-sm text-gray-600">
             {" "}
-            {singleProduct.pCategory ? singleProduct.pCategory.cName : ""}
+            {singleProduct.pCategory
+              ? language === "english"
+                ? singleProduct.pCategory.cName
+                : singleProduct.pCategory.aName
+              : ""}
           </span>
         </div>
       </div>

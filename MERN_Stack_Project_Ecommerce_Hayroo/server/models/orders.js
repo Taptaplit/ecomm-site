@@ -14,10 +14,6 @@ const orderSchema = new mongoose.Schema(
       ref: "users",
       required: true,
     },
-    amount: {
-      type: Number,
-      required: true,
-    },
     transactionId: {
       type: String,
       required: true,
