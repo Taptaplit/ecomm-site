@@ -55,7 +55,7 @@ const Navber = (props) => {
       <nav className="absolute top-0 w-full z-20 shadow-lg lg:shadow-none bg-accent">
         <div className="m-4 md:mx-12 md:my-6 grid grid-cols-4 lg:grid-cols-3">
           <div className="hidden lg:block col-span-1 flex text-gray-600 mt-1">
-            <span
+            {/* <span
               className="hover:bg-gray-200 px-4 py-3 rounded-lg font-light tracking-widest hover:text-gray-800 cursor-pointer"
               onClick={(e) => history.push("/")}
             >
@@ -72,7 +72,7 @@ const Navber = (props) => {
               onClick={(e) => history.push("/contact-us")}
             >
               {language === "english" ? "Contact Us" : "اتصل بنا"}
-            </span>
+            </span> */}
           </div>
           <div className="col-span-2 lg:hidden flex justify-items-stretch	 items-center">
             <svg

@@ -67,7 +67,7 @@ const Slider = (props) => {
                 d="M9 5l7 7-7 7"
               />
             </svg>
-            <div className="absolute inset-0 flex items-center justify-center">
+            {/* <div className="absolute inset-0 flex items-center justify-center">
               <a
                 href="#shop"
                 style={{ background: "#303031" }}
@@ -75,7 +75,7 @@ const Slider = (props) => {
               >
                 {language === "english" ? "Shop Now" : "تسوق الآن"}
               </a>
-            </div>
+            </div> */}
           </>
         ) : null}
       </div>
