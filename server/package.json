@@ -7,6 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "nodemon app.js"
   },
+  "engines": {
+    "node": ">=14 <16"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/hasan-py/MERN_Stack_Project_Balqees_Ecommerce"
