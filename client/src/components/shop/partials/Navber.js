@@ -5,6 +5,8 @@ import "./style.css";
 import { logout } from "./Action";
 import { LayoutContext } from "../index";
 import { isAdmin } from "../auth/fetchApi";
+import axios from "axios";
+import { getAllCategory } from "../../admin/categories/FetchApi";
 
 export const checkLanguage = () => {
   const language = localStorage.getItem("balquees_language");
@@ -14,12 +16,17 @@ export const checkLanguage = () => {
 const Navber = (props) => {
   const history = useHistory();
   const location = useLocation();
+  const apiURL = process.env.REACT_APP_API_URL;
 
   const { data, dispatch } = useContext(LayoutContext);
   const [language, setLanguage] = useState();
+  const [dropdown, setDropdown] = useState(false);
+  const [categories, setCategories] = useState();
+  const [subCategory, setSubCategory] = useState("makeup");
   useEffect(() => {
     const current_lang = checkLanguage();
     setLanguage(current_lang);
+    getAllCategory().then((res) => setCategories(res));
   }, []);
 
   const navberToggleOpen = () =>
@@ -49,19 +56,215 @@ const Navber = (props) => {
     window.location.reload();
   };
 
+  console.log(categories);
+
   return (
     <Fragment>
       {/* Navber Section */}
+      {dropdown && (
+        <div className="fixed z-40 left-0 top-0 w-screen h-screen bg-red-200 flex flex-col justify-start items-start">
+          <p className=" mt-4 ml-6 font-bold text-9xl">
+            <span
+              className="hover:cursor-pointer"
+              onClick={() => setDropdown(false)}
+            >
+              {"<"}
+            </span>{" "}
+            <span className="ml-4 font-medium text-4xl tracking-widest">
+              Categories
+            </span>
+          </p>
+          <div className="w-screen h-full flex">
+            <div className="w-1/4 h-full py-16 px-8">
+              {categories &&
+                categories.Categories.map((category) => (
+                  <div
+                    onClick={() => setSubCategory(category.cName.toLowerCase())}
+                    className="w-full flex justify-between items-center text-gray-700 hover:cursor-pointer hover:text-black"
+                  >
+                    <p className="text-3xl font-medium">
+                      {language === "english" ? category.cName : category.aName}
+                    </p>
+                    <p className="text-4xl font-medium">{">"}</p>
+                  </div>
+                ))}
+            </div>
+            {/* {categories && categories.Categories.map((category) => <>{console.log(JSON.parse(category[language === "english" ? "cSubCategory" : "aSubCategory"]))}</>)} */}
+            {categories &&
+              categories.Categories.map((category) => (
+                <>
+                  {subCategory === category.cName.toLowerCase() && (
+                    <div className="w-3/4 h-full pt-16 bg-red-200 flex items-start justify-start ml-6">
+                      {Object.entries(
+                        JSON.parse(
+                          category[
+                            language === "english"
+                              ? "cSubCategory"
+                              : "aSubCategory"
+                          ]
+                        )
+                      ).map((subCategories) => (
+                        <div className="w-1/4 flex flex-col items-start justify-start px-2">
+                          <h1 className="text-2xl font-medium">
+                            {subCategories[0]}
+                          </h1>
+                          <ul className="mt-3">
+                            {subCategories[1].map((subCategory) => (
+                              <li className="text-sm font-medium">
+                                {subCategory}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                      <div className="w-1/4 flex flex-col items-start justify-start px-2">
+                        <h1 className="text-xs font-medium text-gray-700">
+                          Featured
+                        </h1>
+                        <ul className="mt-2">
+                          {language === "english" &&
+                            category.cFeatured.map((name) => (
+                              <li className="text-sm font-medium">{name}</li>
+                            ))}
+                          {language !== "english" &&
+                            category.aFeatured.map((name) => (
+                              <li className="text-sm font-medium">{name}</li>
+                            ))}
+                        </ul>
+                      </div>
+                    </div>
+                  )}
+                </>
+              ))}
+            {/* {subCategory === "makeup" && (
+              <div className="w-3/4 h-full pt-16 bg-red-200 flex items-start justify-end">
+                <div className="w-1/4 flex flex-col items-start justify-start px-2">
+                  <h1 className="text-2xl font-medium">Face</h1>
+                  <ul className="mt-3">
+                    <li className="text-sm font-medium">Foundation</li>
+                    <li className="text-sm font-medium">Foundation</li>
+                    <li className="text-sm font-medium">Face Powder</li>
+                    <li className="text-sm font-medium">Concealer</li>
+                    <li className="text-sm font-medium">Color Correcting</li>
+                    <li className="text-sm font-medium">Face Primer</li>
+                    <li className="text-sm font-medium">BB & CC Creams</li>
+                    <li className="text-sm font-medium">Blush</li>
+                    <li className="text-sm font-medium">Bronzer</li>
+                    <li className="text-sm font-medium">Contouring</li>
+                    <li className="text-sm font-medium">Highlighter</li>
+                    <li className="text-sm font-medium">
+                      Setting Spray & Powder
+                    </li>
+                    <li className="text-sm font-medium">Makeup Remover</li>
+                  </ul>
+                  <h1 className="mt-10 text-2xl font-medium">Lips</h1>
+                  <ul className="mt-3">
+                    <li className="text-sm font-medium">Lipstick</li>
+                    <li className="text-sm font-medium">Lip Gloss</li>
+                    <li className="text-sm font-medium">Lip Liner</li>
+                    <li className="text-sm font-medium">Lip Stain</li>
+                    <li className="text-sm font-medium">Lip Plumpers</li>
+                    <li className="text-sm font-medium">Lip Tints & Balms</li>
+                    <li className="text-sm font-medium">Lip Primer</li>
+                  </ul>
+                </div>
+                <div className="w-1/4 flex flex-col items-start justify-start px-2">
+                  <h1 className="text-2xl font-medium">Face</h1>
+                  <ul className="mt-3">
+                    <li className="text-sm font-medium">Foundation</li>
+                    <li className="text-sm font-medium">Foundation</li>
+                    <li className="text-sm font-medium">Face Powder</li>
+                    <li className="text-sm font-medium">Concealer</li>
+                    <li className="text-sm font-medium">Color Correcting</li>
+                    <li className="text-sm font-medium">Face Primer</li>
+                    <li className="text-sm font-medium">BB & CC Creams</li>
+                    <li className="text-sm font-medium">Blush</li>
+                    <li className="text-sm font-medium">Bronzer</li>
+                    <li className="text-sm font-medium">Contouring</li>
+                    <li className="text-sm font-medium">Highlighter</li>
+                    <li className="text-sm font-medium">
+                      Setting Spray & Powder
+                    </li>
+                    <li className="text-sm font-medium">Makeup Remover</li>
+                  </ul>
+                  <h1 className="mt-10 text-2xl font-medium">Lips</h1>
+                  <ul className="mt-3">
+                    <li className="text-sm font-medium">Lipstick</li>
+                    <li className="text-sm font-medium">Lip Gloss</li>
+                    <li className="text-sm font-medium">Lip Liner</li>
+                    <li className="text-sm font-medium">Lip Stain</li>
+                    <li className="text-sm font-medium">Lip Plumpers</li>
+                    <li className="text-sm font-medium">Lip Tints & Balms</li>
+                    <li className="text-sm font-medium">Lip Primer</li>
+                  </ul>
+                </div>
+                <div className="w-1/4 flex flex-col items-start justify-start px-2">
+                  <h1 className="text-2xl font-medium">Face</h1>
+                  <ul className="mt-3">
+                    <li className="text-sm font-medium">Foundation</li>
+                    <li className="text-sm font-medium">Foundation</li>
+                    <li className="text-sm font-medium">Face Powder</li>
+                    <li className="text-sm font-medium">Concealer</li>
+                    <li className="text-sm font-medium">Color Correcting</li>
+                    <li className="text-sm font-medium">Face Primer</li>
+                    <li className="text-sm font-medium">BB & CC Creams</li>
+                    <li className="text-sm font-medium">Blush</li>
+                    <li className="text-sm font-medium">Bronzer</li>
+                    <li className="text-sm font-medium">Contouring</li>
+                    <li className="text-sm font-medium">Highlighter</li>
+                    <li className="text-sm font-medium">
+                      Setting Spray & Powder
+                    </li>
+                    <li className="text-sm font-medium">Makeup Remover</li>
+                  </ul>
+                  <h1 className="mt-10 text-2xl font-medium">Lips</h1>
+                  <ul className="mt-3">
+                    <li className="text-sm font-medium">Lipstick</li>
+                    <li className="text-sm font-medium">Lip Gloss</li>
+                    <li className="text-sm font-medium">Lip Liner</li>
+                    <li className="text-sm font-medium">Lip Stain</li>
+                    <li className="text-sm font-medium">Lip Plumpers</li>
+                    <li className="text-sm font-medium">Lip Tints & Balms</li>
+                    <li className="text-sm font-medium">Lip Primer</li>
+                  </ul>
+                </div>
+                <div className="w-1/4 flex flex-col items-start justify-start px-2">
+                  <h1 className="text-xs font-medium text-gray-700">
+                    Featured
+                  </h1>
+                  <ul className="mt-2">
+                    <li className="text-sm font-medium">Foundation</li>
+                    <li className="text-sm font-medium">Foundation</li>
+                    <li className="text-sm font-medium">Face Powder</li>
+                    <li className="text-sm font-medium">Concealer</li>
+                    <li className="text-sm font-medium">Color Correcting</li>
+                    <li className="text-sm font-medium">Face Primer</li>
+                    <li className="text-sm font-medium">BB & CC Creams</li>
+                    <li className="text-sm font-medium">Blush</li>
+                    <li className="text-sm font-medium">Bronzer</li>
+                    <li className="text-sm font-medium">Contouring</li>
+                    <li className="text-sm font-medium">Highlighter</li>
+                    <li className="text-sm font-medium">
+                      Setting Spray & Powder
+                    </li>
+                    <li className="text-sm font-medium">Makeup Remover</li>
+                  </ul>
+                </div>
+              </div>
+            )} */}
+          </div>
+        </div>
+      )}
       <nav className="absolute top-0 w-full z-20 shadow-lg lg:shadow-none bg-accent">
         <div className="m-4 md:mx-12 md:my-6 grid grid-cols-4 lg:grid-cols-3">
           <div className="hidden lg:block col-span-1 flex text-gray-600 mt-1">
-            {/* <span
+            <span
               className="hover:bg-gray-200 px-4 py-3 rounded-lg font-light tracking-widest hover:text-gray-800 cursor-pointer"
-              onClick={(e) => history.push("/")}
+              onClick={(e) => setDropdown(true)}
             >
               {language === "english" ? "Shop" : "محل"}
             </span>
-            <span
+            {/* <span
               className="hover:bg-gray-200 px-4 py-3 rounded-lg font-light tracking-widest hover:text-gray-800 cursor-pointer"
               onClick={(e) => history.push("/blog")}
             >
@@ -74,6 +277,7 @@ const Navber = (props) => {
               {language === "english" ? "Contact Us" : "اتصل بنا"}
             </span> */}
           </div>
+
           <div className="col-span-2 lg:hidden flex justify-items-stretch	 items-center">
             <svg
               onClick={(e) => navberToggleOpen()}

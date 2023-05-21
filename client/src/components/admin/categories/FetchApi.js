@@ -28,6 +28,10 @@ export const createCategory = async ({
   cImage,
   cDescription,
   aDescription,
+  cSubCategory,
+  aSubCategory,
+  cFeatured,
+  aFeatured,
   cStatus,
 }) => {
   let formData = new FormData();
@@ -36,6 +40,10 @@ export const createCategory = async ({
   formData.append("aName", aName);
   formData.append("cDescription", cDescription);
   formData.append("aDescription", aDescription);
+  formData.append("cSubCategory", JSON.stringify(cSubCategory));
+  formData.append("aSubCategory", JSON.stringify(aSubCategory));
+  formData.append("cFeatured", cFeatured);
+  formData.append("aFeatured", aFeatured);
   formData.append("cStatus", cStatus);
 
   try {

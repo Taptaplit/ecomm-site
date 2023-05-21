@@ -6323,6 +6323,10 @@ video {
   font-size: 4rem;
 }
 
+.text-9xl {
+  font-size: 50px;
+}
+
 .leading-3 {
   line-height: .75rem;
 }
@@ -23197,6 +23201,9 @@ video {
   }
 
   .sm\:cursor-pointer {
+    cursor: pointer;
+  }
+  .hover\:cursor-pointer {
     cursor: pointer;
   }
 

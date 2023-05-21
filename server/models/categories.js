@@ -18,6 +18,22 @@ const categorySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    cSubCategory: {
+      type: mongoose.SchemaTypes.Mixed,
+      required: true,
+    },
+    aSubCategory: {
+      type: mongoose.SchemaTypes.Mixed,
+      required: true,
+    },
+    cFeatured: {
+      type: Array,
+      required: true,
+    },
+    aFeatured: {
+      type: Array,
+      required: true,
+    },
     cImage: {
       type: String,
     },
