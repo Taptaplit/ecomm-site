@@ -5,8 +5,7 @@ import "./style.css";
 import { logout } from "./Action";
 import { LayoutContext } from "../index";
 import { isAdmin } from "../auth/fetchApi";
-import axios from "axios";
-import { getAllCategory } from "../../admin/categories/FetchApi";
+import { getAllCategory, getCertainCategory } from "../../admin/categories/FetchApi";
 
 export const checkLanguage = () => {
   const language = localStorage.getItem("balquees_language");
@@ -16,7 +15,6 @@ export const checkLanguage = () => {
 const Navber = (props) => {
   const history = useHistory();
   const location = useLocation();
-  const apiURL = process.env.REACT_APP_API_URL;
 
   const { data, dispatch } = useContext(LayoutContext);
   const [language, setLanguage] = useState();
@@ -78,180 +76,48 @@ const Navber = (props) => {
             <div className="w-1/4 h-full py-16 px-8">
               {categories &&
                 categories.Categories.map((category) => (
-                  <div
-                    onClick={() => setSubCategory(category.cName.toLowerCase())}
-                    className="w-full flex justify-between items-center text-gray-700 hover:cursor-pointer hover:text-black"
-                  >
-                    <p className="text-3xl font-medium">
-                      {language === "english" ? category.cName : category.aName}
-                    </p>
-                    <p className="text-4xl font-medium">{">"}</p>
-                  </div>
+                  <>
+                    {category.cType === "Normal" && (
+                      <div
+                        onClick={() =>
+                          setSubCategory(category.cName.toLowerCase())
+                        }
+                        className="w-full flex justify-between items-center text-gray-700 hover:cursor-pointer hover:text-black"
+                      >
+                        <p className="text-3xl font-medium">
+                          {language === "english"
+                            ? category.cName
+                            : category.aName}
+                        </p>
+                        <p className="text-4xl font-medium">{">"}</p>
+                      </div>
+                    )}
+                  </>
                 ))}
             </div>
-            {/* {categories && categories.Categories.map((category) => <>{console.log(JSON.parse(category[language === "english" ? "cSubCategory" : "aSubCategory"]))}</>)} */}
             {categories &&
               categories.Categories.map((category) => (
                 <>
                   {subCategory === category.cName.toLowerCase() && (
-                    <div className="w-3/4 h-full pt-16 bg-red-200 flex items-start justify-start ml-6">
-                      {Object.entries(
-                        JSON.parse(
-                          category[
-                            language === "english"
-                              ? "cSubCategory"
-                              : "aSubCategory"
-                          ]
-                        )
-                      ).map((subCategories) => (
-                        <div className="w-1/4 flex flex-col items-start justify-start px-2">
-                          <h1 className="text-2xl font-medium">
-                            {subCategories[0]}
+                    <div className="w-3/4 h-90 pt-16 bg-red-200 flex flex-col flex-wrap items-start justify-start ml-6 mb-8">
+                      {category[
+                        language === "english" ? "cSubCategory" : "aSubCategory"
+                      ].map((subCategories) => (
+                        <div onClick={() => {
+                          getCertainCategory({name: subCategories}).then(res => {
+                            history.push(`/products/category/${res.Categories[0]._id}`);
+                            window.location.reload();
+                          })
+                        }}className="flex flex-col items-start justify-start px-2">
+                          <h1 className="hover:cursor-pointer text-2xl font-medium mb-4">
+                            {subCategories}
                           </h1>
-                          <ul className="mt-3">
-                            {subCategories[1].map((subCategory) => (
-                              <li className="text-sm font-medium">
-                                {subCategory}
-                              </li>
-                            ))}
-                          </ul>
                         </div>
                       ))}
-                      <div className="w-1/4 flex flex-col items-start justify-start px-2">
-                        <h1 className="text-xs font-medium text-gray-700">
-                          Featured
-                        </h1>
-                        <ul className="mt-2">
-                          {language === "english" &&
-                            category.cFeatured.map((name) => (
-                              <li className="text-sm font-medium">{name}</li>
-                            ))}
-                          {language !== "english" &&
-                            category.aFeatured.map((name) => (
-                              <li className="text-sm font-medium">{name}</li>
-                            ))}
-                        </ul>
-                      </div>
                     </div>
                   )}
                 </>
               ))}
-            {/* {subCategory === "makeup" && (
-              <div className="w-3/4 h-full pt-16 bg-red-200 flex items-start justify-end">
-                <div className="w-1/4 flex flex-col items-start justify-start px-2">
-                  <h1 className="text-2xl font-medium">Face</h1>
-                  <ul className="mt-3">
-                    <li className="text-sm font-medium">Foundation</li>
-                    <li className="text-sm font-medium">Foundation</li>
-                    <li className="text-sm font-medium">Face Powder</li>
-                    <li className="text-sm font-medium">Concealer</li>
-                    <li className="text-sm font-medium">Color Correcting</li>
-                    <li className="text-sm font-medium">Face Primer</li>
-                    <li className="text-sm font-medium">BB & CC Creams</li>
-                    <li className="text-sm font-medium">Blush</li>
-                    <li className="text-sm font-medium">Bronzer</li>
-                    <li className="text-sm font-medium">Contouring</li>
-                    <li className="text-sm font-medium">Highlighter</li>
-                    <li className="text-sm font-medium">
-                      Setting Spray & Powder
-                    </li>
-                    <li className="text-sm font-medium">Makeup Remover</li>
-                  </ul>
-                  <h1 className="mt-10 text-2xl font-medium">Lips</h1>
-                  <ul className="mt-3">
-                    <li className="text-sm font-medium">Lipstick</li>
-                    <li className="text-sm font-medium">Lip Gloss</li>
-                    <li className="text-sm font-medium">Lip Liner</li>
-                    <li className="text-sm font-medium">Lip Stain</li>
-                    <li className="text-sm font-medium">Lip Plumpers</li>
-                    <li className="text-sm font-medium">Lip Tints & Balms</li>
-                    <li className="text-sm font-medium">Lip Primer</li>
-                  </ul>
-                </div>
-                <div className="w-1/4 flex flex-col items-start justify-start px-2">
-                  <h1 className="text-2xl font-medium">Face</h1>
-                  <ul className="mt-3">
-                    <li className="text-sm font-medium">Foundation</li>
-                    <li className="text-sm font-medium">Foundation</li>
-                    <li className="text-sm font-medium">Face Powder</li>
-                    <li className="text-sm font-medium">Concealer</li>
-                    <li className="text-sm font-medium">Color Correcting</li>
-                    <li className="text-sm font-medium">Face Primer</li>
-                    <li className="text-sm font-medium">BB & CC Creams</li>
-                    <li className="text-sm font-medium">Blush</li>
-                    <li className="text-sm font-medium">Bronzer</li>
-                    <li className="text-sm font-medium">Contouring</li>
-                    <li className="text-sm font-medium">Highlighter</li>
-                    <li className="text-sm font-medium">
-                      Setting Spray & Powder
-                    </li>
-                    <li className="text-sm font-medium">Makeup Remover</li>
-                  </ul>
-                  <h1 className="mt-10 text-2xl font-medium">Lips</h1>
-                  <ul className="mt-3">
-                    <li className="text-sm font-medium">Lipstick</li>
-                    <li className="text-sm font-medium">Lip Gloss</li>
-                    <li className="text-sm font-medium">Lip Liner</li>
-                    <li className="text-sm font-medium">Lip Stain</li>
-                    <li className="text-sm font-medium">Lip Plumpers</li>
-                    <li className="text-sm font-medium">Lip Tints & Balms</li>
-                    <li className="text-sm font-medium">Lip Primer</li>
-                  </ul>
-                </div>
-                <div className="w-1/4 flex flex-col items-start justify-start px-2">
-                  <h1 className="text-2xl font-medium">Face</h1>
-                  <ul className="mt-3">
-                    <li className="text-sm font-medium">Foundation</li>
-                    <li className="text-sm font-medium">Foundation</li>
-                    <li className="text-sm font-medium">Face Powder</li>
-                    <li className="text-sm font-medium">Concealer</li>
-                    <li className="text-sm font-medium">Color Correcting</li>
-                    <li className="text-sm font-medium">Face Primer</li>
-                    <li className="text-sm font-medium">BB & CC Creams</li>
-                    <li className="text-sm font-medium">Blush</li>
-                    <li className="text-sm font-medium">Bronzer</li>
-                    <li className="text-sm font-medium">Contouring</li>
-                    <li className="text-sm font-medium">Highlighter</li>
-                    <li className="text-sm font-medium">
-                      Setting Spray & Powder
-                    </li>
-                    <li className="text-sm font-medium">Makeup Remover</li>
-                  </ul>
-                  <h1 className="mt-10 text-2xl font-medium">Lips</h1>
-                  <ul className="mt-3">
-                    <li className="text-sm font-medium">Lipstick</li>
-                    <li className="text-sm font-medium">Lip Gloss</li>
-                    <li className="text-sm font-medium">Lip Liner</li>
-                    <li className="text-sm font-medium">Lip Stain</li>
-                    <li className="text-sm font-medium">Lip Plumpers</li>
-                    <li className="text-sm font-medium">Lip Tints & Balms</li>
-                    <li className="text-sm font-medium">Lip Primer</li>
-                  </ul>
-                </div>
-                <div className="w-1/4 flex flex-col items-start justify-start px-2">
-                  <h1 className="text-xs font-medium text-gray-700">
-                    Featured
-                  </h1>
-                  <ul className="mt-2">
-                    <li className="text-sm font-medium">Foundation</li>
-                    <li className="text-sm font-medium">Foundation</li>
-                    <li className="text-sm font-medium">Face Powder</li>
-                    <li className="text-sm font-medium">Concealer</li>
-                    <li className="text-sm font-medium">Color Correcting</li>
-                    <li className="text-sm font-medium">Face Primer</li>
-                    <li className="text-sm font-medium">BB & CC Creams</li>
-                    <li className="text-sm font-medium">Blush</li>
-                    <li className="text-sm font-medium">Bronzer</li>
-                    <li className="text-sm font-medium">Contouring</li>
-                    <li className="text-sm font-medium">Highlighter</li>
-                    <li className="text-sm font-medium">
-                      Setting Spray & Powder
-                    </li>
-                    <li className="text-sm font-medium">Makeup Remover</li>
-                  </ul>
-                </div>
-              </div>
-            )} */}
           </div>
         </div>
       )}

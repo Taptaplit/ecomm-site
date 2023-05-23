@@ -22,6 +22,19 @@ export const getAllCategory = async () => {
   }
 };
 
+export const getCertainCategory = async (data) => {
+  try {
+    let res = await axios.post(
+      `${apiURL}/api/category/certain-category`,
+      data,
+      Headers()
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const createCategory = async ({
   cName,
   aName,
@@ -30,8 +43,7 @@ export const createCategory = async ({
   aDescription,
   cSubCategory,
   aSubCategory,
-  cFeatured,
-  aFeatured,
+  cType,
   cStatus,
 }) => {
   let formData = new FormData();
@@ -40,11 +52,10 @@ export const createCategory = async ({
   formData.append("aName", aName);
   formData.append("cDescription", cDescription);
   formData.append("aDescription", aDescription);
-  formData.append("cSubCategory", JSON.stringify(cSubCategory));
-  formData.append("aSubCategory", JSON.stringify(aSubCategory));
-  formData.append("cFeatured", cFeatured);
-  formData.append("aFeatured", aFeatured);
+  formData.append("cSubCategory", cSubCategory);
+  formData.append("aSubCategory", aSubCategory);
   formData.append("cStatus", cStatus);
+  formData.append("cType", cType);
 
   try {
     let res = await axios.post(

@@ -15,10 +15,9 @@ const AddCategoryModal = (props) => {
     aDescription: "",
     cImage: "",
     cStatus: "Active",
-    cSubCategory: {},
-    aSubCategory: {},
-    cFeatured: [],
-    aFeatured: [],
+    cType: "Sub",
+    cSubCategory: [],
+    aSubCategory: [],
     success: false,
     error: false,
   });
@@ -62,11 +61,10 @@ const AddCategoryModal = (props) => {
           cDescription: "",
           aDescription: "",
           cImage: "",
-          cSubCategory: {},
-          aSubCategory: {},
-          cFeatured: [],
-          aFeatured: [],
+          cSubCategory: [],
+          aSubCategory: [],
           cStatus: "Active",
+          cType: "Sub",
           success: responseData.success,
           error: false,
         });
@@ -78,11 +76,10 @@ const AddCategoryModal = (props) => {
             aName: "",
             cDescription: "",
             aDescription: "",
-            cSubCategory: {},
-            aSubCategory: {},
-            cFeatured: [],
-            aFeatured: [],
+            cSubCategory: [],
+            aSubCategory: [],
             cStatus: "Active",
+            cType: "Sub",
             success: false,
             error: false,
           });
@@ -148,6 +145,29 @@ const AddCategoryModal = (props) => {
           {fData.error ? alert(fData.error, "red") : ""}
           {fData.success ? alert(fData.success, "green") : ""}
           <form className="w-full" onSubmit={(e) => submitForm(e)}>
+            <div className="flex flex-col space-y-1 w-full">
+              <label htmlFor="status">Category Type</label>
+              <select
+                name="status"
+                onChange={(e) =>
+                  setFdata({
+                    ...fData,
+                    success: false,
+                    error: false,
+                    cType: e.target.value,
+                  })
+                }
+                className="px-4 py-2 border focus:outline-none"
+                id="status"
+              >
+                <option name="status" value="Sub">
+                  Sub-Category
+                </option>
+                <option name="status" value="Normal">
+                  Category
+                </option>
+              </select>
+            </div>
             <div className="flex flex-col space-y-1 w-full py-4">
               <label htmlFor="name">Category Name</label>
               <input
@@ -260,51 +280,17 @@ const AddCategoryModal = (props) => {
             </div>
             <div className="flex flex-col space-y-1 w-full mt-4">
               <label htmlFor="name">
-                Featured (Seperate with semi-colon)
-              </label>
-              <input
-                onChange={(e) => {
-                  setFdata({
-                    ...fData,
-                    success: false,
-                    error: false,
-                    cFeatured: e.target.value.split(";"),
-                  });
-                }}
-                className="px-4 py-2 border focus:outline-none"
-                type="text"
-              />
-            </div>
-            <div className="flex flex-col space-y-1 w-full mt-4">
-              <label htmlFor="name">
-                Featured (Arabic, Seperate with semi-colon)
-              </label>
-              <input
-                onChange={(e) => {
-                    setFdata({
-                      ...fData,
-                      success: false,
-                      error: false,
-                      aFeatured: e.target.value.split(";"),
-                    });
-                }}
-                className="px-4 py-2 border focus:outline-none"
-                type="text"
-              />
-            </div>
-            <div className="flex flex-col space-y-1 w-full mt-4">
-              <label htmlFor="name">
                 Sub-Categories (Seperate with semi-colon)
               </label>
               <input
                 onChange={(e) => {
                   if (e.target.value.endsWith(";")) {
                     const subs = fData.cSubCategory;
-                    subs[
+                    subs.push(
                       e.target.value.split(";")[
                         e.target.value.split(";").length - 2
                       ]
-                    ] = [];
+                    );
                     setFdata({
                       ...fData,
                       success: false,
@@ -317,35 +303,7 @@ const AddCategoryModal = (props) => {
                 type="text"
               />
             </div>
-            {fData?.cSubCategory &&
-              Object.entries(fData.cSubCategory).map((subCategory) => (
-                <div className="flex flex-col space-y-1 w-full mt-4">
-                  <label htmlFor="name">
-                    Sub-Categories for {subCategory} (Seperate with semi-colon)
-                  </label>
-                  <input
-                    onChange={(e) => {
-                      if (e.target.value.endsWith(";")) {
-                        const subs = fData.cSubCategory;
-                        subs[subCategory[subCategory.length - 2]].push(
-                          e.target.value.split(";")[
-                            e.target.value.split(";").length - 2
-                          ]
-                        );
-                        setFdata({
-                          ...fData,
-                          success: false,
-                          error: false,
-                          cSubCategory: subs,
-                        });
-                      }
-                    }}
-                    className="px-4 py-2 border focus:outline-none"
-                    type="text"
-                  />
-                </div>
-              ))}
-              <div className="flex flex-col space-y-1 w-full mt-4">
+            <div className="flex flex-col space-y-1 w-full mt-4">
               <label htmlFor="name">
                 Sub-Categories (Arabic, seperate with semi-colon)
               </label>
@@ -353,11 +311,11 @@ const AddCategoryModal = (props) => {
                 onChange={(e) => {
                   if (e.target.value.endsWith(";")) {
                     const subs = fData.aSubCategory;
-                    subs[
+                    subs.push(
                       e.target.value.split(";")[
                         e.target.value.split(";").length - 2
                       ]
-                    ] = [];
+                    );
                     setFdata({
                       ...fData,
                       success: false,
@@ -370,34 +328,6 @@ const AddCategoryModal = (props) => {
                 type="text"
               />
             </div>
-            {fData?.aSubCategory &&
-              Object.entries(fData.aSubCategory).map((subCategory) => (
-                <div className="flex flex-col space-y-1 w-full mt-4">
-                  <label htmlFor="name">
-                    Sub-Categories for {subCategory} (Arabic, seperate with semi-colon)
-                  </label>
-                  <input
-                    onChange={(e) => {
-                      if (e.target.value.endsWith(";")) {
-                        const subs = fData.aSubCategory;
-                        subs[subCategory[subCategory.length - 2]].push(
-                          e.target.value.split(";")[
-                            e.target.value.split(";").length - 2
-                          ]
-                        );
-                        setFdata({
-                          ...fData,
-                          success: false,
-                          error: false,
-                          aSubCategory: subs,
-                        });
-                      }
-                    }}
-                    className="px-4 py-2 border focus:outline-none"
-                    type="text"
-                  />
-                </div>
-              ))}
             <div className="flex flex-col space-y-1 w-full pb-4 md:pb-6 mt-4">
               <button
                 style={{ background: "#303031" }}

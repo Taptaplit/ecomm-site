@@ -17,6 +17,7 @@ var storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.get("/all-category", categoryController.getAllCategory);
+router.post("/certain-category", categoryController.getCertainCategory);
 router.post(
   "/add-category",
   loginCheck,

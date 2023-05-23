@@ -13,9 +13,19 @@ class Category {
       console.log(err);
     }
   }
+  async getCertainCategory(req, res) {
+    try {
+      let Categories = await categoryModel.find({ cName: req.body.name }).sort({ _id: -1 });
+      if (Categories) {
+        return res.json({ Categories });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   async postAddCategory(req, res) {
-    let { cName, aName, cDescription, aDescription, cStatus, cSubCategory, aSubCategory, cFeatured, aFeatured } = req.body;
+    let { cName, aName, cDescription, aDescription, cStatus, cSubCategory, aSubCategory, cType } = req.body;
     console.log(req.body);
     let cImage = req.file.filename;
     const filePath = `../server/public/uploads/categories/${cImage}`;
@@ -46,9 +56,8 @@ class Category {
             aDescription,
             cSubCategory,
             aSubCategory,
-            cFeatured,
-            aFeatured,
             cStatus,
+            cType,
             cImage,
           });
           await newCategory.save((err) => {

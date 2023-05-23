@@ -19,18 +19,10 @@ const categorySchema = new mongoose.Schema(
       required: true,
     },
     cSubCategory: {
-      type: mongoose.SchemaTypes.Mixed,
-      required: true,
-    },
-    aSubCategory: {
-      type: mongoose.SchemaTypes.Mixed,
-      required: true,
-    },
-    cFeatured: {
       type: Array,
       required: true,
     },
-    aFeatured: {
+    aSubCategory: {
       type: Array,
       required: true,
     },
@@ -38,6 +30,10 @@ const categorySchema = new mongoose.Schema(
       type: String,
     },
     cStatus: {
+      type: String,
+      required: true,
+    },
+    cType: {
       type: String,
       required: true,
     },

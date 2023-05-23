@@ -96,24 +96,30 @@ const CategoryList = () => {
           categories.map((item, index) => {
             return (
               <Fragment key={index}>
-                <div
-                  onClick={(e) =>
-                    history.push(`/products/category/${item._id}`)
-                  }
-                  className="col-span-1 m-2 flex flex-col items-center justify-center space-y-2 cursor-pointer"
-                >
-                  <img
-                    src={`${apiURL}/uploads/categories/${item.cImage}`}
-                    className="h-31 w-31 object-cover"
-                    alt="pic"
-                  />
-                  <div className="font-medium">{language === "english" ? item.cName : item.aName}</div>
-                </div>
+                {item.cType === "Sub" && (
+                  <div
+                    onClick={(e) =>
+                      history.push(`/products/category/${item._id}`)
+                    }
+                    className="col-span-1 m-2 flex flex-col items-center justify-center space-y-2 cursor-pointer"
+                  >
+                    <img
+                      src={`${apiURL}/uploads/categories/${item.cImage}`}
+                      className="h-31 w-31 object-cover"
+                      alt="pic"
+                    />
+                    <div className="font-medium">
+                      {language === "english" ? item.cName : item.aName}
+                    </div>
+                  </div>
+                )}
               </Fragment>
             );
           })
         ) : (
-          <div className="text-xl text-center my-4">{language === "english" ? "No Category" : "لا تصنيف"}</div>
+          <div className="text-xl text-center my-4">
+            {language === "english" ? "No Category" : "لا تصنيف"}
+          </div>
         )}
       </ScrollMenu>
     </div>
